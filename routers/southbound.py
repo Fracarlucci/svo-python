@@ -17,17 +17,15 @@ async def initialize(request: Request):
 @router.post('/register')
 async def register(request: Request):
     r = Register(await request)
-    r.get_device()
-    r.update_vo_info()
+    r.check_device()
     r.configuration()
-    #r.platform()
     return "Registration completed"
 
 @router.post('/send-data')
 async def send_data(request: Request):
     s = SendData(await request)
     s.validate()
-    s.Data_input()
+    s.data_input()
     return "Saved Data"
 
 @router.delete('/unregister')

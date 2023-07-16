@@ -1,4 +1,4 @@
-from vo.models.VoInfo import VoInfo
+from db.VoInfo import VoInfo
 from fastapi import HTTPException, Request
 from config import session
 import logging

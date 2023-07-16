@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Request
-from vo.models.Device_Id import Device_Id
-from vo.models.Configuration import Configuration
+from db.Device_Id import Device_Id
+from db.Configuration import Configuration
 import logging
 from vo.platform.registration.registration import registration
 import config
