@@ -1,5 +1,8 @@
+import datetime
 from typing import Annotated
 from fastapi import APIRouter, Header, Request
+import paho.mqtt.publish as publish
+from config import session
 from northbound_api.handlers.get_schedule import GetSchedule
 from northbound_api.handlers.set_schedule import SetSchedule
 from northbound_api.handlers.set_trigger import SetTrigger
@@ -21,6 +24,10 @@ async def get_schedule(feature : str):
 @router.get('/sensors/') # HEADER
 async def get_sensor(sensor: Annotated[dict | None, Header("Sensor info")] = None):
     return GetSensor(sensor).granted_actions()
+
+@router.get('/live-sensors-data-mqtt/')
+async def get_live_sensor_data():
+    return publish.single(topic="sensors/get_data", hostname="broker.mqtt-dashboard.com")
 
 @router.post('/set-schedule')
 async def set_schedule(request: Request):

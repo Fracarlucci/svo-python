@@ -14,7 +14,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 session = SessionLocal()
 
 Base = declarative_base()
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
 
 # TODO add cache
 
