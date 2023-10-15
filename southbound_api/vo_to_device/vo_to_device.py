@@ -5,7 +5,7 @@ import json
 import urllib
 from urllib.parse import urlencode
 import urllib.parse
-from MQTT_communication import mqtt
+# from MQTT_communication import mqtt
 import logging
 
 mode= "MQTT"
@@ -43,8 +43,8 @@ class send():
 
 class MQTT():
     def send_mqtt(self, message, topic):
-        mqtt.subscribe(topic)
-        mqtt.publish(str(topic), str(message))
+        # mqtt.subscribe(topic)
+        # mqtt.publish(str(topic), str(message))
         resp = json.dumps({"Response": "OK"})
         return JSONResponse(content=resp, status_code=200)
 

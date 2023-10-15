@@ -1,6 +1,6 @@
 from fastapi import HTTPException, Request
 from vo.models_svo.FriendVoInfo import FriendVoInfo
-from db.VoInfo import VoInfo
+from vo.models.VoInfo import VoInfo
 import config
 import json, requests
 from config import session

@@ -1,13 +1,13 @@
 from fastapi import HTTPException, Request
-from db.Device_Id import Device_Id
-from db.Data import Data
-from db.VoInfo import VoInfo
+from vo.models.Device_Id import Device_Id
+from vo.models.Data import Data
+from vo.models.VoInfo import VoInfo
 import config
 import logging
 from config import session
 from datetime import datetime
 from northbound_api.functions import Functions
-from MQTT_communication import mqtt
+# from MQTT_communication import mqtt
 #from vu_interface.ControlHandlers.checkControl import checkControl_sensors
 import requests
 
@@ -82,7 +82,18 @@ class SendData:
                 location=Functions.search_place(Functions(), float(self.body["latitude"]), float(self.body["longitude"]))
                 print(location)
                 id = location["location_id"]
-                mqtt.subscribe(str(id))
+                # mqtt.subscribe(str(id))
                 Functions.send_message_mqtt(Functions(), str(id), str(msg))
-                
+
+        ##se viene ricevuto mac-address da sensore, pubblica un messaggio sulla subscribe equivalente
+        #if body["type"]=="mac-address":
+          #  if session.query(VoInfo).first() is not None:
+           #     item=VoInfo.query.first()
+           #     if item.location == "fixed":
+           #         msg = {"svo_url": item.url, "type": "fixed"}
+           #     else:
+           #         msg = {"svo_url": item.url}
+            #    mqtt.subscribe((str(body["value"])))
+            #    Functions.send_message_mqtt(Functions(), str(body["value"]), str(msg))
+
         return "Validation completed"
