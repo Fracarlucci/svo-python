@@ -3,7 +3,7 @@ from vo.models.Device_Id import Device_Id
 from vo.models.VoInfo import VoInfo
 from vo.models.Configuration import Configuration
 import logging
-from vo.platform.registration.registration import registration
+# from vo.platform.registration.registration import registration
 from config import session, Base
 from SVO.utils.send_message import SendMessage
 import device_comm
@@ -77,13 +77,13 @@ class Register:
             session.commit()
         # config.cache.set('hal_key', self.body["hal_key"])
 
-    async def platform(self):
-        #registra il device in piattaforma
-        #NON SERVE CON VU
-        r_code = registration(self.body["url"], self.body["brand"], self.body["model"], self.body["w_mac"], self.body["b_mac"])
+    # async def platform(self):
+    #     #registra il device in piattaforma
+    #     #NON SERVE CON VU
+    #     r_code = registration(self.body["url"], self.body["brand"], self.body["model"], self.body["w_mac"], self.body["b_mac"])
 
-        if r_code == 200:
-            return "Registration success!!"
-        else:
-            logging.warning("Register, error in registration in platform.")
-            raise HTTPException(status_code=400, detail="Bad request. Error in registration!")
+    #     if r_code == 200:
+    #         return "Registration success!!"
+    #     else:
+    #         logging.warning("Register, error in registration in platform.")
+    #         raise HTTPException(status_code=400, detail="Bad request. Error in registration!")
