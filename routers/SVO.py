@@ -10,20 +10,20 @@ router = APIRouter()
 
 @router.post('/initialize-relationship')
 async def initialize_relationship(request : Request):
-    return InitializeRelationship.initialize_relationship(await request)
+    return await InitializeRelationship.initialize_relationship(request)
 
 @router.post('/send-friendship-request')
-async def send_friendship_request(request : Request):
+async def send_friendship_request():
     try:
-        return SendFriendshipRequest.send(await request)
+        return await SendFriendshipRequest.send()
     except Exception:
-        logging.warning("Send_friendship_request, error in send")
+        logging.warning(" Send_friendship_request, error in send")
         raise HTTPException(status_code=400, detail="Error in send")
 
 @router.post('/receive-friendship-request')
 async def receive_friendship_request(request : Request):
     try:
-        ReceiveFriendshipRequest.receive(await request)
+        await ReceiveFriendshipRequest.receive(request)
         return "request receive"
     except Exception:
         logging.warning("Receive_friendship_request, error in receive")
@@ -32,20 +32,20 @@ async def receive_friendship_request(request : Request):
 @router.post('/receive-friendship-back')
 async def receive_friendship_back(request : Request):
     try:
-        ReceiveFriendshipBack.receive_back(await request)
+        await ReceiveFriendshipBack.receive_back(request)
         return "request receive back"
     except Exception:
         logging.warning("Receive_friendship_back, error in receive back")
         raise HTTPException(status_code=400, detail="Error in receive back")
 
-@router.get('/friends/') # HEADER
-async def get_friend_profile(friend: Annotated[dict | None, Header("Friend info")] = None):
-    try:
-        FriendProfile.get_profile(friend)
-        return "Profile sent"
-    except Exception:
-        logging.warning("FriendProfile, error in get_friend_profile")
-        raise HTTPException(status_code=400, detail="Error in get friend profile")
+# @router.get('/friends/') # HEADER
+# async def get_friend_profile(friend: Annotated[dict | None, Header("Friend info")] = None):
+#     try:
+#         FriendProfile.get_profile(friend)
+#         return "Profile sent"
+#     except Exception:
+#         logging.warning("FriendProfile, error in get_friend_profile")
+#         raise HTTPException(status_code=400, detail="Error in get friend profile")
 
 @router.get('/friendList') # HEADER
 async def get_friend_list(authorization: Annotated[str | None, Header(description="personal key")] = None):
