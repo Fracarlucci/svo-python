@@ -6,15 +6,19 @@ from vo.models_svo.FriendVoInfo import FriendVoInfo
 
 def on_message(mosq, obj, msg):
     url_rcv = msg.payload.decode()
-    print("MES RCV " + msg.topic)
+    vo_info = session.query(VoInfo).first()
 
-    if url_rcv != "":
-        vo_info = session.query(VoInfo).first()
+    if url_rcv != "" and url_rcv != vo_info.url:
+        suffix = "/discover"
+        OORtopic = vo_info.owner_key + suffix
+        CLORtopic = vo_info.location + suffix
+        
+        print("New message in " + msg.topic)
 
-        if msg.topic == vo_info.owner_key:
-            OORdiscovery(url_rcv, vo_info)
-        elif msg.topic == vo_info.location:
-            CLORdiscovery(url_rcv, vo_info)
+        if msg.topic == OORtopic:
+            friend_discovery(url_rcv, OORtopic, "OOR", vo_info.url)
+        elif msg.topic == CLORtopic:
+            friend_discovery(url_rcv, CLORtopic, "CLOR", vo_info.url)
 
 def on_publish(mosq, obj, mid):
     pass
@@ -35,38 +39,18 @@ def unsubscribe_from(topic):
     client.unsubscribe(topic)
     print("Unsubscribed from: " + topic)
 
-def OORdiscovery(url_rcv: str, vo_info: VoInfo):
-    print(url_rcv)
-
-    friends = session.query(FriendVoInfo).filter_by(relationship="OOR").all()
+def friend_discovery(url_rcv: str, topic: str, relationship: str, my_url: str):
+    friends = session.query(FriendVoInfo).filter_by(relationship=relationship).all()
 
     for friend in friends:
-        if friend.url == url_rcv:
-            print("Friend already in db")
+        if friend.url == url_rcv and friend.relationship == relationship:
+            print("You and {} are already friends".format(url_rcv))
             return
     
-    new_friend = FriendVoInfo(relationship="OOR", url=url_rcv)
+    new_friend = FriendVoInfo(relationship=relationship, url=url_rcv)
     session.add(new_friend)
     session.commit()
 
-    publish.single(topic=vo_info.owner_key+"/discover", payload=vo_info.url, hostname="broker.mqtt-dashboard.com")
+    publish.single(topic=topic, payload=my_url, hostname="broker.mqtt-dashboard.com")
 
-    print("Add new OOR friend")
-
-def CLORdiscovery(url_rcv: str, vo_info: VoInfo):
-    print(url_rcv)
-
-    friends = session.query(FriendVoInfo).filter_by(relationship="CLOR").all()
-
-    for friend in friends:
-        if friend.url == url_rcv:
-            print("Friend already in db")
-            return
-    
-    new_friend = FriendVoInfo(relationship="CLOR", url=url_rcv)
-    session.add(new_friend)
-    session.commit()
-
-    publish.single(topic=vo_info.location+"/discover", payload=vo_info.url, hostname="broker.mqtt-dashboard.com")
-
-    print("Add new CLOR friend")
+    print("Added new {} friend: {}".format(relationship, url_rcv))
