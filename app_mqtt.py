@@ -19,9 +19,9 @@ if __name__ == '__main__':
     device = session.query(Device_Id).first()
     vo_info = session.query(VoInfo).first()
 
-    if device != None:
+    if device != None and vo_info != None:
         device_comm.set_up_mqtt(device.hal_key)
-        mqtt_comm.subscribe_to(vo_info.owner_key, vo_info.url)
-        mqtt_comm.subscribe_to(vo_info.location, vo_info.url)
+        mqtt_comm.subscribe_to(vo_info.owner_key + "/discover", vo_info.url)
+        mqtt_comm.subscribe_to(vo_info.location + "/discover", vo_info.url)
 
     uvicorn.run(app, host=socket.gethostbyname(socket.gethostname()), port=80) # 192.168.1.2

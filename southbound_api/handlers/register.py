@@ -43,7 +43,7 @@ class Register:
 
         # comunicazioni con device e CLOR relationship
         device_comm.set_up_mqtt(self.body["hal_key"])
-        mqtt_comm.subscribe_to(self.body["location"], vo_info.url)
+        mqtt_comm.subscribe_to(self.body["location"] + "/discover", vo_info.url)
 
     async def configuration(self):
         #registra configurazione device

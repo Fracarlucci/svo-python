@@ -12,7 +12,7 @@ class UpdateVoInfo:
         # Update CLOR relationship
         if "location" in body:
             mqtt_comm.unsubscribe_from(vo_info.location)
-            mqtt_comm.subscribe_to(body["location"], vo_info.url)
+            mqtt_comm.subscribe_to(body["location"] + "/discover", vo_info.url)
 
         for key, value in body.items():
             setattr(vo_info, key, value)
