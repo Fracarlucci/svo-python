@@ -1,5 +1,5 @@
 import logging
-
+from config import session
 from fastapi import HTTPException
 from vo.models.VoInfo import VoInfo
 from vo.models.Configuration import Configuration
@@ -12,7 +12,7 @@ from vo.models.VoInfo import VoInfo
 
 
 class commandController():
-    this_svo = VoInfo.query.first()
+    this_svo = session.query(VoInfo).first()
     if this_svo is not None:
         #port = this_svo.vu_url.split(":")[2]
         url_to_send = "http://vu:" +str("1")+ "listener"

@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+SQLAlchemy
+requests
+db-sqlite3
+python-socketio
+paho-mqtt
